@@ -37,6 +37,7 @@ func main() {
 	var (
 		contextName       string
 		labelSelectorExpr string
+		containerName	  string
 		namespaces        []string
 		allNamespaces     bool
 
@@ -68,6 +69,7 @@ func main() {
 	flags.StringVar(&contextName, "context", "", "Kubernetes context name")
 	flags.StringArrayVarP(&namespaces, "namespace", "n", []string{}, "Kubernetes namespace")
 	flags.BoolVar(&allNamespaces, "all-namespaces", false, "Apply to all Kubernetes namespaces")
+	flags.StringVarP(&containerName, "container", "c", "", "Filter logs by container name")
 	flags.StringArrayVarP(&excludePatternStrings, "exclude", "x", []string{},
 		"Exclude using a regular expression. Pattern can be repeated. Takes priority over"+
 			" include patterns and labels.")
@@ -290,6 +292,7 @@ func main() {
 			ExclusionMatcher: exclusionMatcher,
 			Since:            since,
 			SinceStart:       sinceStart,
+			ContainerName:    containerName, 
 		},
 		Callbacks{
 			OnEvent: func(event LogEvent) {
